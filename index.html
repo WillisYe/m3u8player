@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+
+  <link href="https://cdn.bootcdn.net/ajax/libs/video.js/8.16.0/alt/video-js-cdn.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcdn.net/ajax/libs/video.js/8.16.0/video.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+</head>
+
+<body>
+  <video id="my_video_1" class="video-js vjs-default-skin" autoplay muted controls preload="auto"
+    style="width:95vw;max-height:95vh;">
+    <source type="application/x-mpegURL">
+  </video>
+  <div class="tittag" style="word-break:break-all;"> </div>
+  <div class="urltag" style="word-break:break-all;"> </div>
+
+  <div id="tips"></div>
+  <script>
+    var urlObj = new URL(location.href);
+    var url = urlObj.searchParams.get('url');
+    document.querySelector('source').setAttribute('src', url);
+    document.querySelector('.urltag').setAttribute('src', url);
+    document.querySelector('.urltag').innerHTML = url;
+    document.querySelector('.tittag').innerHTML = urlObj.searchParams.get('name');
+    
+    let options = {
+      playbackRates: [1, 1.5, 2, 3, 5, 7, 9]
+    };
+    let player = videojs("my_video_1", options, function onPlayerReady() {
+      lockLandscape();
+    });
+    const hammertime = new Hammer(player.el());
+
+    hammertime.on("swipe", function (e) {
+      if (e.direction === Hammer.DIRECTION_LEFT) {
+        player.currentTime(player.currentTime() - 15);
+      } else if (e.direction === Hammer.DIRECTION_RIGHT) {
+        player.currentTime(player.currentTime() + 15);
+      }
+    });
+
+    hammertime.get("press").set({ time: 500 });
+    hammertime.on("press", function () {
+      player.playbackRate(3);
+    });
+
+    hammertime.on("pressup", function () {
+      player.playbackRate(1);
+    });
+
+    function lockLandscape() {
+      const screenOrientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
+      if (screenOrientation && screenOrientation.lock) {
+        screenOrientation.lock("landscape")
+      }
+    }
+  </script>
+</body>
+
+</html>

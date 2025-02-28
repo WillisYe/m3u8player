@@ -32,11 +32,16 @@
   <div id="tips"></div>
   <script>
     var urlObj = new URL(location.href);
-    var url = urlObj.searchParams.get('amp;url');
+    for (const element of urlObj.searchParams.entries()) {
+      console.log(element);
+    }
+    
+    var url = urlObj.searchParams.get('amp;url') || urlObj.searchParams.get('url');
+    url = url.replace(/\\\//g, '/')
     document.querySelector('source').setAttribute('src', url);
     document.querySelector('.urltag').setAttribute('src', url);
     document.querySelector('.urltag').innerHTML = url;
-    document.querySelector('.tittag').innerHTML = urlObj.searchParams.get('amp;name');
+    document.querySelector('.tittag').innerHTML = urlObj.searchParams.get('amp;name')  || urlObj.searchParams.get('name');
     
     let options = {
       playbackRates: [1, 1.5, 2, 3, 5, 7, 9]

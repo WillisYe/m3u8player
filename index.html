@@ -38,10 +38,11 @@
     
     var url = urlObj.searchParams.get('amp;url') || urlObj.searchParams.get('url');
     url = url.replace(/\\\//g, '/')
+    var name = urlObj.searchParams.get('amp;name')  || urlObj.searchParams.get('name');
     document.querySelector('source').setAttribute('src', url);
     document.querySelector('.urltag').setAttribute('src', url);
-    document.querySelector('.urltag').innerHTML = url;
-    document.querySelector('.tittag').innerHTML = urlObj.searchParams.get('amp;name')  || urlObj.searchParams.get('name');
+    document.querySelector('.urltag').innerHTML = url+`?domianurl=https://${name}.com`;
+    document.querySelector('.tittag').innerHTML = name;
     
     let options = {
       playbackRates: [1, 1.5, 2, 3, 5, 7, 9]
